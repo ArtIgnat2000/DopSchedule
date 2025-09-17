@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание 3Б класса</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --header-bg: #00eeff;
+            --primary-color: #4a90e2;
+            --gradient-start: #66d6ea;
+            --gradient-end: #4b82a2;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Comic Sans MS', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: #333;
+            margin: 0;
+            padding: 10px;
+            line-height: 1.5;
+        }
+
+        header {
+            text-align: center;
+            background-color: var(--header-bg);
+            color: white;
+            padding: 12px 10px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            margin: 5px 0 0;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .meal-link-container {
+            margin-top: 10px;
+        }
+
+        .meal-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 2px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meal-link:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #ff5252, #d32f2f);
+        }
+
+        .meal-link:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .meal-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .meal-link:hover::before {
+            left: 100%;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 100px;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        button.active {
+            background-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Цвета по дням */
+        button:nth-child(1) { background-color: #6b86ff; } /* Пн — красный */
+        button:nth-child(2) { background-color: #4ecdc4; } /* Вт — бирюзовый */
+        button:nth-child(3) { background-color: #45b7d1; } /* Ср — голубой */
+        button:nth-child(4) { background-color: #96cece; } /* Чт — зелёный */
+        button:nth-child(5) { background-color: #9cebf9; } /* Пт — оранжевый */
+
+        .schedule {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--header-bg);
+        }
+
+        .schedule.show {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 8px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        th:first-child, td:first-child {
+            text-align: center;
+            width: 40px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f0f4f8;
+        }
+
+        tr:hover {
+            background-color: #e9f5ff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.8rem;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+            
+            header {
+                padding: 10px 8px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .meal-link {
+                padding: 8px 16px;
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+            
+            .buttons {
+                gap: 6px;
+                margin-bottom: 15px;
+            }
+            
+            button {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+                min-width: 85px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.9rem;
+            }
+            
+            footer {
+                font-size: 0.75rem;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .meal-link {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            button {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+                min-width: 80px;
+            }
+            
+            th, td {
+                padding: 7px 5px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1> Доп расписание </h1>
+        
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="buttons">
+            <button onclick="showDay('pn')" class="active">Пн</button>
+            <button onclick="showDay('vt')">Вт</button>
+            <button onclick="showDay('sr')">Ср</button>
+            <button onclick="showDay('cht')">Чт</button>
+            <button onclick="showDay('pt')">Пт</button>
+        </div>
+
+        <!-- Расписание по дням -->
+        <div id="pn" class="schedule show">
+            <table>
+                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
+                <tr><td>15:30–17:00</td><td></td><td>🤖It куб</td></tr>
+                <tr><td>19:00–20:30</td><td>👊ММА</td><td>👊ММА</td></tr>
+            </table>
+        </div>
+
+        <div id="vt" class="schedule">
+            <table>
+                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
+                <tr><td>14:50–16:00</td><td>🧠Робо</td><td>🧠Робо</td></tr>
+                <tr><td>16:20–17:50</td><td>🤖It куб</td><td></td></tr>
+
+            </table>
+        </div>
+
+        <div id="sr" class="schedule">
+            <table>
+                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
+                <tr><td>19:00–20:30</td><td>👊ММА</td><td>👊ММА</td></tr>
+            </table>
+        </div>
+
+        <div id="cht" class="schedule">
+            <table>
+                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
+                <tr><td>14:50-16:00</td><td>🧠Робо</td><td></td></tr>
+                <tr><td>15:30–17:00</td><td></td><td>🤖It куб</td></tr>
+                <tr><td>16:20-17:50<td>🤖It куб<td></td><td></td></tr>
+        
+            </table>
+        </div>
+
+        <div id="pt" class="schedule">
+            <table>
+                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
+                <tr><td>14:30–16:00</td><td>🤖It куб</td><td></td></tr>
+                <tr><td>19:00–20:30</td><td>👊ММА</td><td>👊ММА</td></tr>
+            </table>
+        </div>
+    </div>
+     
+
+    <footer>
+        &copy; 2025
+    </footer>
+
+    <script>
+        // Обработчик для ссылки "ПИТАНИЕ"
+        document.querySelector('.meal-link').addEventListener('click', function(event) {
+            // Предотвращаем переход по ссылке по умолчанию
+            event.preventDefault();
+            
+            // Получаем URL из атрибута href
+            const url = this.getAttribute('href').trim(); // Удаляем пробелы
+            
+            // Открываем URL в текущем окне
+            window.location.href = url;
+        });
+
+        function showDay(day) {
+            document.querySelectorAll('.buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`button[onclick="showDay('${day}')"]`).classList.add('active');
+            document.querySelectorAll('.schedule').forEach(schedule => {
+                schedule.classList.remove('show');
+            });
+            document.getElementById(day).classList.add('show');
+        }
+    </script>
+</body>
+</html>
