@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>💻 Доп Расписание дети </title>
-    
     <style>
         /* Основные переменные для стиля iOS 26 с Liquid Glass */
         :root {
@@ -53,6 +52,9 @@
             position: relative;
             overflow: hidden;
             transition: transform var(--fluid-animation);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         header:hover {
             transform: scale(1.02); /* Легкая динамика для конкурсного вида */
@@ -75,6 +77,25 @@
         header > * {
             position: relative;
             z-index: 1;
+        }
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+        .header-button {
+            margin-left: auto;
+            padding: 8px 16px;
+            background-color: var(--ios-primary);
+            color: white;
+            border: none;
+            border-radius: var(--corner-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--fluid-animation);
+        }
+        .header-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
         h1 {
             margin: 0;
@@ -236,6 +257,13 @@
             }
             header {
                 padding: 15px 10px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .header-button {
+                margin-left: 0;
+                width: 100%;
+                max-width: 200px;
             }
             h1 {
                 font-size: 1.8rem;
@@ -278,8 +306,10 @@
 </head>
 <body>
     <header>
-        <h1>Доп расписание</h1>
-
+        <div class="header-content">
+            <h1>Доп. расписание</h1>
+        </div>
+        <button class="header-button" onclick="window.location.href='https://artignat2000.github.io/schedule/'">Расписание</button>
     </header>
     <div class="container">
         <div class="buttons">
@@ -333,7 +363,6 @@
             </table>
         </div>
     </div>
-     
     <footer>
         &copy; 2025
     </footer>
@@ -345,7 +374,6 @@
             });
             // Добавляем класс 'active' нажатой кнопке
             document.querySelector(`button[onclick="showDay('${day}')"]`).classList.add('active');
-            
             // Скрываем все расписания
             document.querySelectorAll('.schedule').forEach(schedule => {
                 schedule.classList.remove('show');
