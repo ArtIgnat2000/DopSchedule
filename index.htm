@@ -52,9 +52,6 @@
             position: relative;
             overflow: hidden;
             transition: transform var(--fluid-animation);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         header:hover {
             transform: scale(1.02); /* Легкая динамика для конкурсного вида */
@@ -77,25 +74,6 @@
         header > * {
             position: relative;
             z-index: 1;
-        }
-        .header-content {
-            flex: 1;
-            text-align: center;
-        }
-        .header-button {
-            margin-left: auto;
-            padding: 8px 16px;
-            background-color: var(--ios-primary);
-            color: white;
-            border: none;
-            border-radius: var(--corner-radius);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all var(--fluid-animation);
-        }
-        .header-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
         }
         h1 {
             margin: 0;
@@ -257,13 +235,6 @@
             }
             header {
                 padding: 15px 10px;
-                flex-direction: column;
-                gap: 10px;
-            }
-            .header-button {
-                margin-left: 0;
-                width: 100%;
-                max-width: 200px;
             }
             h1 {
                 font-size: 1.8rem;
@@ -302,14 +273,35 @@
                 font-size: 0.95rem;
             }
         }
+        .schedule-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .schedule-button {
+            padding: 12px 24px;
+            background-color: var(--ios-primary);
+            color: white;
+            border: none;
+            border-radius: var(--corner-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--fluid-animation);
+        }
+        .schedule-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <h1>Доп. расписание</h1>
+        <h1>Доп расписание</h1>
+        <div class="schedule-buttons">
+            <button class="schedule-button" onclick="window.location.href='https://artignat2000.github.io/schedule/'">Витя</button>
+            <button class="schedule-button" onclick="window.location.href='https://artignat2000.github.io/-1-/'">Коля</button>
         </div>
-        <button class="header-button" onclick="window.location.href='https://artignat2000.github.io/schedule/'">Расписание</button>
     </header>
     <div class="container">
         <div class="buttons">
