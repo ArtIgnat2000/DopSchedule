@@ -2,22 +2,15 @@ param(
     [int]$Port = 8000
 )
 
-# Простая обёртка для python -m http.server
-# Использование: .\serve.ps1 8000
+$ErrorActionPreference = "Stop"
+Set-Location $PSScriptRoot
 
-function Test-Python {
-    try {
-        $py = Get-Command python -ErrorAction Stop
-        return $true
-    } catch {
-        return $false
-    }
-}
-
-if (Test-Python) {
-    Write-Host "Запускаю Python HTTP сервер на порту $Port..." -ForegroundColor Green
+if (Get-Command python -ErrorAction SilentlyContinue) {
+    Write-Host "Starting Python http.server on port $Port ..."
     python -m http.server $Port
+} elseif (Get-Command python3 -ErrorAction SilentlyContinue) {
+    Write-Host "Starting Python3 http.server on port $Port ..."
+    python3 -m http.server $Port
 } else {
-    Write-Host "Python не найден в PATH. Установите Python 3 или используйте Node.js http-server или VS Code Live Server." -ForegroundColor Yellow
-    Write-Host "Ссылка на загрузку Python: https://www.python.org/downloads/"
+    Write-Host "Python not found. Install Python 3 or use: npx http-server -p $Port"
 }
