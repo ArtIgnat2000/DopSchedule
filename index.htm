@@ -1,380 +1,772 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💻 Доп Расписание дети </title>
+    <meta charset="utf-8">
+    <title>Доп. расписание · Витя и Коля</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4c6fff">
+    <meta name="description" content="Дополнительное расписание Вити и Коли — в стиле iOS 26">
     <style>
-        /* Основные переменные для стиля iOS 26 с Liquid Glass */
         :root {
-            --ios-liquid-glass: rgba(255, 255, 255, 0.15); /* Полупрозрачный "жидкий стеклянный" материал */
-            --ios-primary: #007AFF; /* Стандартный синий iOS */
-            --ios-background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(209, 224, 252, 0.6)); /* Нежный градиент с прозрачностью */
-            --ios-cell-bg: rgba(255, 255, 255, 0.3); /* Фон ячеек с повышенной прозрачностью для Liquid Glass */
-            --ios-border: rgba(0, 0, 0, 0.05); /* Мягкие границы */
-            --ios-text-primary: #000000;
-            --ios-text-secondary: #8E8E93;
-            --ios-blue-light: #5AC8FA;
-            --ios-green: #34C759;
-            --ios-indigo: #5856D6;
-            --ios-orange: #FF9500;
-            --ios-pink: #FF2D55;
-            --blur-radius: 30px; /* Увеличенный радиус размытия для эффекта Liquid Glass */
-            --fluid-animation: 0.6s cubic-bezier(0.25, 0.1, 0.25, 1); /* Плавная анимация для динамики */
-            --corner-radius: 18px; /* Более скругленные углы в стиле iOS 26 */
-            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1); /* Тени для глубины Liquid Glass */
+            --text: #111114;
+            --text2: rgba(60, 60, 67, 0.62);
+            --divider: rgba(60, 60, 67, 0.12);
+            --tint: #0a84ff;
+            --glass-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.16));
+            --glass-border: rgba(255, 255, 255, 0.65);
+            --glass-inner: rgba(255, 255, 255, 0.55);
+            --glass-shadow: 0 10px 40px rgba(40, 30, 110, 0.20), inset 0 1px 0 var(--glass-inner), inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+            --pill-active: rgba(255, 255, 255, 0.75);
+            --card-pad: 16px;
+            --tile: 38px;
+            --picto: 38px;
+            --vitya: #0a84ff;
+            --kolya: #af52de;
+            --both: #30d158;
         }
-        /* Базовые стили тела с Liquid Glass эффектом */
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text: #ffffff;
+                --text2: rgba(235, 235, 245, 0.65);
+                --divider: rgba(255, 255, 255, 0.12);
+                --tint: #64d2ff;
+                --glass-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+                --glass-border: rgba(255, 255, 255, 0.18);
+                --glass-inner: rgba(255, 255, 255, 0.20);
+                --glass-shadow: 0 12px 44px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+                --pill-active: rgba(255, 255, 255, 0.22);
+                --vitya: #64d2ff;
+                --kolya: #bf5af2;
+                --both: #30d158;
+            }
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body { margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-            background: var(--ios-background);
-            color: var(--ios-text-primary);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            color: var(--text);
             min-height: 100vh;
-            backdrop-filter: blur(var(--blur-radius)); /* Размытие для стеклянного эффекта */
-            -webkit-backdrop-filter: blur(var(--blur-radius));
-            overflow-x: hidden; /* Предотвращение горизонтального скролла */
+            min-height: 100dvh;
+            overflow-x: hidden;
+            touch-action: manipulation;
         }
-        /* Шапка сайта с динамическим Liquid Glass */
-        header {
-            text-align: center;
-            background-color: var(--ios-liquid-glass);
-            color: var(--ios-text-primary);
-            padding: 20px 15px;
-            border-radius: var(--corner-radius);
-            margin-bottom: 25px;
-            box-shadow: var(--shadow-glass);
-            border: 1px solid var(--ios-border);
-            backdrop-filter: blur(var(--blur-radius));
-            -webkit-backdrop-filter: blur(var(--blur-radius));
-            position: relative;
-            overflow: hidden;
-            transition: transform var(--fluid-animation);
+
+        /* ── Живой градиентный фон в духе iOS 26 ─────────────────────── */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: linear-gradient(170deg, #dcefff 0%, #e9e4ff 45%, #f5e0f0 100%);
         }
-        header:hover {
-            transform: scale(1.02); /* Легкая динамика для конкурсного вида */
-        }
-        header::before {
-            content: "";
+        .blob {
             position: absolute;
-            top: -60%;
-            left: -60%;
-            width: 220%;
-            height: 220%;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 80%);
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.75;
+            will-change: transform;
+        }
+        .b1 { width: 55vmax; height: 55vmax; top: -18vmax; left: -16vmax; background: radial-gradient(circle, #6ec8ff 0%, transparent 65%); animation: drift1 26s ease-in-out infinite alternate; }
+        .b2 { width: 50vmax; height: 50vmax; top: -10vmax; right: -20vmax; background: radial-gradient(circle, #a88bff 0%, transparent 65%); animation: drift2 32s ease-in-out infinite alternate; }
+        .b3 { width: 48vmax; height: 48vmax; bottom: -18vmax; left: 10vmax; background: radial-gradient(circle, #ff9ad5 0%, transparent 65%); animation: drift3 38s ease-in-out infinite alternate; }
+        .b4 { width: 42vmax; height: 42vmax; bottom: -12vmax; right: -8vmax; background: radial-gradient(circle, #54e6c0 0%, transparent 65%); animation: drift1 44s ease-in-out infinite alternate-reverse; }
+        .b5 { width: 34vmax; height: 34vmax; top: 34%; left: 30%; background: radial-gradient(circle, #ffd166 0%, transparent 65%); opacity: 0.5; animation: drift2 50s ease-in-out infinite alternate-reverse; }
+
+        @media (prefers-color-scheme: dark) {
+            .bg { background: linear-gradient(170deg, #141238 0%, #1c1440 45%, #301438 100%); }
+            .b1 { background: radial-gradient(circle, #2454ff 0%, transparent 65%); opacity: 0.6; }
+            .b2 { background: radial-gradient(circle, #7a3cff 0%, transparent 65%); opacity: 0.6; }
+            .b3 { background: radial-gradient(circle, #d6278a 0%, transparent 65%); opacity: 0.55; }
+            .b4 { background: radial-gradient(circle, #0e9f7e 0%, transparent 65%); opacity: 0.55; }
+            .b5 { background: radial-gradient(circle, #8a6d00 0%, transparent 65%); opacity: 0.4; }
+        }
+
+        @keyframes drift1 { from { transform: translate(0, 0) scale(1); } to { transform: translate(6vmax, 4vmax) scale(1.12); } }
+        @keyframes drift2 { from { transform: translate(0, 0) scale(1.05); } to { transform: translate(-5vmax, 5vmax) scale(1); } }
+        @keyframes drift3 { from { transform: translate(0, 0) scale(1); } to { transform: translate(4vmax, -5vmax) scale(1.15); } }
+
+        /* ── Каркас приложения ───────────────────────────────────────── */
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: calc(20px + env(safe-area-inset-top)) 16px 128px;
+        }
+
+        /* ── Шапка: крупный заголовок ────────────────────────────────── */
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 4px 18px;
+        }
+        .hero-icon {
+            flex: none;
+            width: 58px;
+            height: 58px;
+            border-radius: 15.5px;
+            display: grid;
+            place-items: center;
+            font-size: 27px;
+            background: linear-gradient(145deg, #4c6fff, #9b5cff);
+            box-shadow: 0 8px 22px rgba(76, 111, 255, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            overflow: hidden;
+        }
+        .hero-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+        .hero .subtitle {
+            margin: 3px 0 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text2);
+        }
+        .hero-date {
+            margin-top: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tint);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hero-date::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--tint);
+            box-shadow: 0 0 10px var(--tint);
+        }
+
+        /* ── Стекло ───────────────────────────────────────────────────── */
+        .glass {
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(36px) saturate(180%);
+            -webkit-backdrop-filter: blur(36px) saturate(180%);
+        }
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            .glass { background: rgba(248, 250, 255, 0.92); }
+            @media (prefers-color-scheme: dark) { .glass { background: rgba(28, 24, 56, 0.92); } }
+        }
+
+        /* ── Быстрые ссылки на школьные расписания ───────────────────── */
+        .kids-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .kid-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 18px;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .kid-card:active { transform: scale(0.97); }
+        .kid-avatar {
+            flex: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 12px rgba(30, 30, 80, 0.15);
+        }
+        .kid-card.vitya .kid-avatar {
+            background: linear-gradient(145deg, #5b8cff, #0a84ff);
+        }
+        .kid-card.kolya .kid-avatar {
+            background: linear-gradient(145deg, #c77dff, #af52de);
+        }
+        .kid-meta { flex: 1; min-width: 0; }
+        .kid-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+        .kid-hint {
+            margin-top: 2px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text2);
+        }
+        .kid-chev {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text2);
+            opacity: 0.5;
+        }
+
+        /* ── Сегментный переключатель дней ───────────────────────────── */
+        .segmented {
+            display: flex;
+            gap: 2px;
+            padding: 4px;
+            border-radius: 15px;
+            margin-bottom: 14px;
+        }
+        .seg-indicator {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 4px;
+            width: 20%;
+            border-radius: 11px;
+            background: var(--pill-active);
+            box-shadow: 0 2px 10px rgba(30, 30, 80, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+            transition: left 0.38s cubic-bezier(0.3, 0.9, 0.3, 1), width 0.38s cubic-bezier(0.3, 0.9, 0.3, 1);
             z-index: 0;
-            animation: fluid-glow 5s infinite alternate ease-in-out; /* Анимация для "жидкости" */
         }
-        @keyframes fluid-glow {
-            0% { transform: translate(0, 0); opacity: 0.5; }
-            100% { transform: translate(10%, 10%); opacity: 0.8; }
-        }
-        header > * {
+        .seg {
             position: relative;
             z-index: 1;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.6px;
-        }
-        .subtitle {
-            margin: 6px 0 0;
-            font-size: 1.1rem;
-            color: var(--ios-text-secondary);
-            font-weight: 400;
-        }
-        /* Контейнер основного контента с Liquid Glass */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: var(--ios-liquid-glass);
-            padding: 20px;
-            border-radius: var(--corner-radius);
-            box-shadow: var(--shadow-glass);
-            border: 1px solid var(--ios-border);
-            backdrop-filter: blur(var(--blur-radius));
-            -webkit-backdrop-filter: blur(var(--blur-radius));
-            transition: all var(--fluid-animation);
-        }
-        .container:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Динамическая тень для глубины */
-        }
-        /* Кнопки дней недели с эффектом Liquid Glass */
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        button {
-            padding: 14px 0;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: var(--corner-radius);
-            font-weight: 600;
-            transition: all var(--fluid-animation);
             flex: 1;
-            min-width: 70px;
-            background-color: var(--ios-liquid-glass);
-            color: var(--ios-text-primary);
-            box-shadow: var(--shadow-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
+            border: none;
+            background: transparent;
+            font: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text2);
+            padding: 9px 4px;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: color 0.25s ease, transform 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-        button::after {
+        .seg:active { transform: scale(0.94); }
+        .seg.active { color: var(--text); }
+        .seg.today::after {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--tint);
+            margin: 3px auto -3px;
+            opacity: 0.9;
+        }
+
+        /* ── Карточка дня ─────────────────────────────────────────────── */
+        .day-card { border-radius: 24px; padding: 6px 0; overflow: hidden; }
+        .day-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px var(--card-pad) 10px;
+        }
+        .day-head h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        .today-chip {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--tint);
+            background: rgba(10, 132, 255, 0.14);
+            border: 1px solid rgba(10, 132, 255, 0.28);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+        .today-chip.show { display: inline-flex; }
+
+        .schedule { display: none; }
+        .schedule.show { display: block; }
+
+        .lesson {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px var(--card-pad);
+            animation: rise 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+            animation-delay: calc(var(--i) * 42ms);
+        }
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(12px) scale(0.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .lesson:not(:first-child)::before {
             content: "";
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
-            pointer-events: none;
-            border-radius: var(--corner-radius);
-            transition: opacity var(--fluid-animation);
+            left: calc(var(--card-pad) + var(--tile) + var(--picto) + 24px);
+            right: var(--card-pad);
+            height: 1px;
+            background: var(--divider);
         }
-        button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.2);
+        .tile {
+            flex: none;
+            width: var(--tile);
+            height: var(--tile);
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            font-variant-numeric: tabular-nums;
+            color: var(--text);
+            background: rgba(120, 120, 128, 0.10);
+            border: 1px solid rgba(120, 120, 128, 0.14);
         }
-        button:hover::after {
-            opacity: 0.7; /* Усиление "жидкого" эффекта */
+        @media (prefers-color-scheme: dark) {
+            .tile { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); }
         }
-        button.active {
-            background-color: var(--ios-primary);
-            color: white;
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+
+        .picto {
+            flex: none;
+            width: var(--picto);
+            height: var(--picto);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+            line-height: 1;
+            background: rgba(255, 255, 255, 0.38);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
         }
-        /* Стили для расписания с анимацией появления */
-        .schedule {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
+        @media (prefers-color-scheme: dark) {
+            .picto {
+                background: rgba(255, 255, 255, 0.10);
+                border-color: rgba(255, 255, 255, 0.16);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            }
         }
-        .schedule.show {
-            display: block;
-            animation: fluidFadeIn 0.5s ease-out forwards;
-        }
-        @keyframes fluidFadeIn {
-            from { opacity: 0; transform: translateY(15px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        /* Таблица расписания с Liquid Glass */
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 15px 0;
-            border-radius: var(--corner-radius);
+        .lesson .info { flex: 1; min-width: 0; }
+        .lesson .name {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
             overflow: hidden;
-            box-shadow: var(--shadow-glass);
-            background-color: var(--ios-liquid-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            text-overflow: ellipsis;
         }
-        th, td {
-            border: none;
-            border-bottom: 1px solid var(--ios-border);
-            padding: 16px 14px;
-            font-size: 1.1rem;
-            text-align: left;
-        }
-        th:last-child, td:last-child {
-            border-right: none;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        th {
-            background-color: rgba(242, 242, 247, 0.5);
-            color: var(--ios-text-secondary);
-            font-weight: 600;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-        th:first-child, td:first-child {
-            text-align: center;
-            width: 70px;
+        .lesson .time {
+            margin-top: 3px;
+            font-size: 13.5px;
             font-weight: 500;
+            color: var(--text2);
+            font-variant-numeric: tabular-nums;
         }
-        tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.2);
+        .lesson .who {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
         }
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-            transition: background-color 0.3s ease; /* Плавный hover для конкурсного вида */
+
+        /* Бейджи участников */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 999px;
+            letter-spacing: -0.1px;
         }
-        /* Футер с Liquid Glass */
+        .badge.vitya {
+            color: var(--vitya);
+            background: rgba(10, 132, 255, 0.14);
+            border: 1px solid rgba(10, 132, 255, 0.28);
+        }
+        .badge.kolya {
+            color: var(--kolya);
+            background: rgba(175, 82, 222, 0.14);
+            border: 1px solid rgba(175, 82, 222, 0.28);
+        }
+        .badge.both {
+            color: #1d8a3f;
+            background: rgba(52, 199, 89, 0.16);
+            border: 1px solid rgba(52, 199, 89, 0.35);
+        }
+        @media (prefers-color-scheme: dark) {
+            .badge.both { color: #5cf28a; }
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--text2);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 34px 16px 38px;
+            margin: 0;
+        }
+
+        /* ── Легенда ──────────────────────────────────────────────────── */
+        .legend-card { margin-top: 14px; border-radius: 24px; padding: 6px 0; overflow: hidden; }
+        .legend-card h3 {
+            margin: 0;
+            padding: 14px var(--card-pad) 6px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text2);
+        }
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px var(--card-pad);
+            position: relative;
+        }
+        .legend-row:not(:first-of-type)::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: var(--card-pad);
+            right: var(--card-pad);
+            height: 1px;
+            background: var(--divider);
+        }
+        .legend-dot {
+            flex: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(120, 120, 128, 0.12);
+        }
+        .legend-dot.vitya { background: var(--vitya); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.18); }
+        .legend-dot.kolya { background: var(--kolya); box-shadow: 0 0 0 3px rgba(175, 82, 222, 0.18); }
+        .legend-dot.both { background: var(--both); box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.18); }
+        .legend-text { font-size: 15.5px; font-weight: 600; }
+
+        /* ── Плавающий док внизу (Liquid Glass) ───────────────────────── */
+        .dock {
+            position: fixed;
+            left: 50%;
+            bottom: calc(14px + env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            padding: 6px;
+            border-radius: 26px;
+            z-index: 50;
+            white-space: nowrap;
+            max-width: calc(100vw - 24px);
+        }
+        .dock-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .dock-btn:hover { background: rgba(255, 255, 255, 0.22); }
+        .dock-btn:active { transform: scale(0.94); }
+        @media (prefers-color-scheme: dark) { .dock-btn:hover { background: rgba(255, 255, 255, 0.12); } }
+        .dock-ico {
+            width: 28px;
+            height: 28px;
+            border-radius: 8.5px;
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.2));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+        @media (max-width: 420px) {
+            .dock-btn { padding: 8px 11px; font-size: 13px; gap: 6px; }
+            .dock-ico { width: 26px; height: 26px; font-size: 14px; }
+        }
+
         footer {
             text-align: center;
-            margin-top: 30px;
-            color: var(--ios-text-secondary);
-            font-size: 1rem;
-            padding: 12px;
-            border-radius: var(--corner-radius);
-            background-color: var(--ios-liquid-glass);
-            backdrop-filter: blur(var(--blur-radius));
-            -webkit-backdrop-filter: blur(var(--blur-radius));
-            box-shadow: var(--shadow-glass);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text2);
+            padding: 18px 0 0;
         }
-        /* Адаптация для мобильных устройств */
-        @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-            header {
-                padding: 15px 10px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            .subtitle {
-                font-size: 1rem;
-            }
-            .container {
-                padding: 15px;
-            }
-            .buttons {
-                gap: 8px;
-                margin-bottom: 20px;
-            }
-            button {
-                padding: 12px 0;
-                font-size: 1rem;
-                min-width: 60px;
-            }
-            th, td {
-                padding: 14px 12px;
-                font-size: 1rem;
-            }
-            footer {
-                font-size: 0.9rem;
-                margin-top: 25px;
-            }
-        }
-        @media (max-width: 400px) {
-            button {
-                padding: 10px 0;
-                font-size: 0.95rem;
-            }
-            th, td {
-                padding: 12px 10px;
-                font-size: 0.95rem;
-            }
-        }
-        .schedule-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .schedule-button {
-            padding: 12px 24px;
-            background-color: var(--ios-primary);
-            color: white;
-            border: none;
-            border-radius: var(--corner-radius);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all var(--fluid-animation);
-        }
-        .schedule-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+
+        @media (max-width: 420px) {
+            .hero h1 { font-size: 28px; }
+            .hero-icon { width: 52px; height: 52px; font-size: 24px; }
+            .lesson .name { font-size: 15.5px; }
+            :root { --tile: 34px; --picto: 34px; }
+            .tile { font-size: 14px; }
+            .picto { font-size: 18px; border-radius: 10px; }
+            .kids-row { gap: 8px; }
+            .kid-card { padding: 10px 12px; gap: 10px; }
+            .kid-avatar { width: 38px; height: 38px; font-size: 18px; }
+            .kid-name { font-size: 15px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Расписание</h1>
-        <div class="schedule-buttons">
-            <button class="schedule-button" onclick="window.location.href='https://artignat2000.github.io/scool_shedule2026/'">Витя</button>
-            <button class="schedule-button" onclick="window.location.href='https://artignat2000.github.io/-1-/'">Коля</button>
-        </div> 
-    </header>
-    <div class="container">
-        <div class="buttons">
-            <button onclick="showDay('pn')" class="active">Пн</button>
-            <button onclick="showDay('vt')">Вт</button>
-            <button onclick="showDay('sr')">Ср</button>
-            <button onclick="showDay('cht')">Чт</button>
-            <button onclick="showDay('pt')">Пт</button>
-        </div>
-        <!-- Расписание по дням -->
-        <div id="pn" class="schedule show">
-            <table>
-                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
-                <tr><td>14:40–</td><td></td><td>🏃 Спортивный час</td></tr>
-                <tr><td>15:30–17:00</td><td></td><td>🤖 It куб</td></tr>
-                <tr><td>19:00–20:30</td><td>👊 ММА</td><td>👊 ММА</td></tr>
-            </table>
-        </div>
-        <div id="vt" class="schedule">
-            <table>
-                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
-                <tr><td>13:10–13:50</td><td>🏃 Физкультура</td><td></td></tr>
-                <tr><td>14:00–14:40</td><td></td><td>🌊 Бассейн</td></tr>
-                <tr><td>14:50–16:00</td><td>🧠 Робо</td><td>🧠 Робо</td></tr>   
-                <tr><td>16:20–17:50</td><td>🤖 It куб</td><td></td></tr>
-            </table>
-        </div>
-        <div id="sr" class="schedule">
-            <table>
-                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
-                <tr><td>12:10–12:50</td><td></td><td>🏃 Физкультура</td></tr>
-                <tr><td>19:00–20:30</td><td>👊 ММА</td><td>👊 ММА</td></tr>
-            </table>
-        </div>
-        <div id="cht" class="schedule">
-            <table>
-                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
-                <tr><td>12:20–13:00</td><td>🏃 Физкультура</td><td></td></tr>
-                <tr><td>14:50–15:30</td><td>🌵Мы все такие разные</td><td></td></tr>
-                <tr><td>16:20–17:50</td><td>🤖 It куб</td><td></td></tr>
-            </table>
-        </div>
-        <div id="pt" class="schedule">
-            <table>
-                <tr><th>Время</th><th>Витя</th><th>Коля</th></tr>
-                <tr><td>11:20–12:00</td><td>🌊 Бассейн</td><td></td></tr>
-                <tr><td>12:10–12:50</td><td></td><td>🏃 Физкультура</td></tr>                               
-                <tr><td>14:45–16:00</td><td>🤖 It куб</td><td></td></tr>
-                <tr><td>19:00–20:30</td><td>👊 ММА</td><td>👊 ММА</td></tr>
-            </table>
-        </div>
+    <div class="bg" aria-hidden="true">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+        <div class="blob b4"></div>
+        <div class="blob b5"></div>
     </div>
-    <footer>
-        <div class="schedule-buttons" style="margin-bottom: 8px;">
-            <button class="schedule-button" onclick="window.location.href='https://artignat2000.github.io/school/'">Школа программирования V labs</button>
+
+    <main class="app">
+        <header class="hero">
+            <div class="hero-icon" aria-hidden="true">
+                <img src="robot.png" alt="" width="58" height="58">
+            </div>
+            <div>
+                <h1>Доп. занятия</h1>
+                <div class="subtitle">Витя и Коля</div>
+                <div class="hero-date" id="heroDate"></div>
+            </div>
+        </header>
+
+        <div class="kids-row">
+            <a class="kid-card vitya glass" href="https://artignat2000.github.io/scool_shedule2026/">
+                <span class="kid-avatar" aria-hidden="true">👦</span>
+                <span class="kid-meta">
+                    <span class="kid-name">Витя</span>
+                    <span class="kid-hint">Школа · 3 «Б»</span>
+                </span>
+                <span class="kid-chev" aria-hidden="true">›</span>
+            </a>
+            <a class="kid-card kolya glass" href="https://artignat2000.github.io/-1-/">
+                <span class="kid-avatar" aria-hidden="true">🧒</span>
+                <span class="kid-meta">
+                    <span class="kid-name">Коля</span>
+                    <span class="kid-hint">Школьное расписание</span>
+                </span>
+                <span class="kid-chev" aria-hidden="true">›</span>
+            </a>
         </div>
-        &copy; 2025
-    </footer>
+
+        <div class="segmented glass" role="tablist" aria-label="День недели">
+            <div class="seg-indicator" aria-hidden="true"></div>
+            <button class="seg" type="button" role="tab" data-day="pn">Пн</button>
+            <button class="seg" type="button" role="tab" data-day="vt">Вт</button>
+            <button class="seg" type="button" role="tab" data-day="sr">Ср</button>
+            <button class="seg" type="button" role="tab" data-day="cht">Чт</button>
+            <button class="seg" type="button" role="tab" data-day="pt">Пт</button>
+        </div>
+
+        <section class="day-card glass" aria-label="Занятия дня">
+            <div class="day-head">
+                <h2 id="dayTitle">Понедельник</h2>
+                <span id="todayChip" class="today-chip">Сегодня</span>
+            </div>
+            <div id="pn" class="schedule"></div>
+            <div id="vt" class="schedule"></div>
+            <div id="sr" class="schedule"></div>
+            <div id="cht" class="schedule"></div>
+            <div id="pt" class="schedule"></div>
+        </section>
+
+        <section class="legend-card glass" aria-label="Кто ходит">
+            <h3>Кто ходит</h3>
+            <div class="legend-row">
+                <span class="legend-dot vitya" aria-hidden="true"></span>
+                <span class="legend-text">Витя</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-dot kolya" aria-hidden="true"></span>
+                <span class="legend-text">Коля</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-dot both" aria-hidden="true"></span>
+                <span class="legend-text">Оба вместе</span>
+            </div>
+        </section>
+
+        <footer>© 2026 · Дополнительное расписание</footer>
+    </main>
+
+    <nav class="dock glass" aria-label="Разделы">
+        <a href="https://artignat2000.github.io/scool_shedule2026/" class="dock-btn"><span class="dock-ico" aria-hidden="true">📚</span><span>Школа</span></a>
+        <a href="https://artignat2000.github.io/meal-schedule/" class="dock-btn"><span class="dock-ico" aria-hidden="true">🍽️</span><span>Еда</span></a>
+        <a href="https://artignat2000.github.io/school/" class="dock-btn"><span class="dock-ico" aria-hidden="true">💻</span><span>V labs</span></a>
+    </nav>
+
     <script>
-        function showDay(day) {
-            // Удаляем класс 'active' у всех кнопок
-            document.querySelectorAll('.buttons button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Добавляем класс 'active' нажатой кнопке
-            document.querySelector(`button[onclick="showDay('${day}')"]`).classList.add('active');
-            // Скрываем все расписания
-            document.querySelectorAll('.schedule').forEach(schedule => {
-                schedule.classList.remove('show');
-            });
-            // Показываем выбранное расписание
-            document.getElementById(day).classList.add('show');
+        'use strict';
+
+        const DAYS = [
+            { key: 'pn', name: 'Понедельник' },
+            { key: 'vt', name: 'Вторник' },
+            { key: 'sr', name: 'Среда' },
+            { key: 'cht', name: 'Четверг' },
+            { key: 'pt', name: 'Пятница' }
+        ];
+
+        /* Расписание доп. занятий: [номер, время, название с эмодзи, кто: 'vitya'|'kolya'|'both'] */
+        const SCHEDULE = {
+            pn: [
+                ['1', '14:40–',       '🏃 Спортивный час',          'kolya'],
+                ['2', '15:30–17:00',  '🤖 IT-куб',                   'kolya'],
+                ['3', '19:00–20:30',  '👊 ММА',                      'both']
+            ],
+            vt: [
+                ['1', '13:10–13:50',  '🏃 Физкультура',              'vitya'],
+                ['2', '14:00–14:40',  '🌊 Бассейн',                  'kolya'],
+                ['3', '14:50–16:00',  '🧠 Робототехника',            'both'],
+                ['4', '16:20–17:50',  '🤖 IT-куб',                   'vitya']
+            ],
+            sr: [
+                ['1', '12:10–12:50',  '🏃 Физкультура',              'kolya'],
+                ['2', '19:00–20:30',  '👊 ММА',                      'both']
+            ],
+            cht: [
+                ['1', '12:20–13:00',  '🏃 Физкультура',              'vitya'],
+                ['2', '14:50–15:30',  '🌵 Мы все такие разные',      'vitya'],
+                ['3', '16:20–17:50',  '🤖 IT-куб',                   'vitya']
+            ],
+            pt: [
+                ['1', '11:20–12:00',  '🌊 Бассейн',                  'vitya'],
+                ['2', '12:10–12:50',  '🏃 Физкультура',              'kolya'],
+                ['3', '14:45–16:00',  '🤖 IT-куб',                   'vitya'],
+                ['4', '19:00–20:30',  '👊 ММА',                      'both']
+            ]
+        };
+
+        const EMOJI_HEAD = /^(?:[\p{Extended_Pictographic}\u{200D}\uFE0F])+/u;
+
+        function extractEmoji(text) {
+            const m = String(text).match(EMOJI_HEAD);
+            return m ? m[0] : '💡';
         }
+
+        function stripEmoji(text) {
+            return String(text).replace(EMOJI_HEAD, '').trim();
+        }
+
+        function whoBadges(who) {
+            if (who === 'both') {
+                return '<span class="badge both">Оба</span>';
+            }
+            if (who === 'vitya') {
+                return '<span class="badge vitya">Витя</span>';
+            }
+            if (who === 'kolya') {
+                return '<span class="badge kolya">Коля</span>';
+            }
+            return '';
+        }
+
+        function lessonRow(lesson, index) {
+            const num = lesson[0];
+            const time = lesson[1];
+            const raw = String(lesson[2] || '');
+            const who = lesson[3] || 'both';
+            const emoji = extractEmoji(raw);
+            const name = stripEmoji(raw) || raw;
+
+            return '<div class="lesson" style="--i:' + index + '">' +
+                '<div class="tile">' + num + '</div>' +
+                '<div class="picto" aria-hidden="true">' + emoji + '</div>' +
+                '<div class="info">' +
+                    '<div class="name">' + name + '</div>' +
+                    '<div class="time">' + time + '</div>' +
+                    '<div class="who">' + whoBadges(who) + '</div>' +
+                '</div>' +
+                '</div>';
+        }
+
+        function renderSchedule() {
+            DAYS.forEach(day => {
+                const box = document.getElementById(day.key);
+                const lessons = SCHEDULE[day.key];
+                if (!lessons || lessons.length === 0) {
+                    box.innerHTML = '<p class="empty">Нет занятий</p>';
+                    return;
+                }
+                box.innerHTML = lessons.map((lesson, i) => lessonRow(lesson, i)).join('');
+            });
+        }
+
+        function todayKey() {
+            const d = new Date().getDay(); // 1 = Пн ... 5 = Пт
+            return (d >= 1 && d <= 5) ? DAYS[d - 1].key : null;
+        }
+
+        function moveIndicator() {
+            const seg = document.querySelector('.segmented');
+            const ind = seg.querySelector('.seg-indicator');
+            const btn = seg.querySelector('.seg.active');
+            if (!btn) return;
+            ind.style.width = btn.offsetWidth + 'px';
+            ind.style.left = btn.offsetLeft + 'px';
+        }
+
+        function showDay(key) {
+            const info = DAYS.find(d => d.key === key) || DAYS[0];
+            document.getElementById('dayTitle').textContent = info.name;
+            document.getElementById('todayChip').classList.toggle('show', key === todayKey());
+            document.querySelectorAll('.seg').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.day === key);
+                btn.setAttribute('aria-selected', btn.dataset.day === key ? 'true' : 'false');
+            });
+            document.querySelectorAll('.schedule').forEach(s => s.classList.toggle('show', s.id === key));
+            // Перезапуск анимации строк
+            const box = document.getElementById(key);
+            box.querySelectorAll('.lesson').forEach((el, i) => {
+                el.style.animation = 'none';
+                void el.offsetWidth;
+                el.style.animation = '';
+                el.style.setProperty('--i', i);
+            });
+            moveIndicator();
+        }
+
+        // Дата в шапке
+        (function initHeroDate() {
+            const el = document.getElementById('heroDate');
+            const text = new Intl.DateTimeFormat('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })
+                .format(new Date());
+            el.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+        })();
+
+        // Подсветка «сегодня» в сегментах
+        const today = todayKey();
+        if (today) {
+            const todayBtn = document.querySelector('.seg[data-day="' + today + '"]');
+            if (todayBtn) todayBtn.classList.add('today');
+        }
+
+        // Переключение дней
+        document.querySelectorAll('.seg').forEach(btn => {
+            btn.addEventListener('click', () => showDay(btn.dataset.day));
+        });
+
+        window.addEventListener('resize', moveIndicator);
+
+        renderSchedule();
+        showDay(today || 'pn');
     </script>
 </body>
 </html>
