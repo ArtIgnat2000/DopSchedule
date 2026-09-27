@@ -365,9 +365,7 @@
             font-size: 17px;
             font-weight: 700;
             letter-spacing: -0.3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow-wrap: anywhere;
         }
         .lesson .time {
             margin-top: 3px;
@@ -574,6 +572,7 @@
             <button class="seg" type="button" role="tab" data-day="sr">Ср</button>
             <button class="seg" type="button" role="tab" data-day="cht">Чт</button>
             <button class="seg" type="button" role="tab" data-day="pt">Пт</button>
+            <button class="seg" type="button" role="tab" data-day="sb">Сб</button>
         </div>
 
         <section class="day-card glass" aria-label="Занятия дня">
@@ -586,6 +585,7 @@
             <div id="sr" class="schedule"></div>
             <div id="cht" class="schedule"></div>
             <div id="pt" class="schedule"></div>
+            <div id="sb" class="schedule"></div>
         </section>
 
         <section class="legend-card glass" aria-label="Кто ходит">
@@ -621,36 +621,35 @@
             { key: 'vt', name: 'Вторник' },
             { key: 'sr', name: 'Среда' },
             { key: 'cht', name: 'Четверг' },
-            { key: 'pt', name: 'Пятница' }
+            { key: 'pt', name: 'Пятница' },
+            { key: 'sb', name: 'Суббота' }
         ];
 
         /* Расписание доп. занятий: [номер, время, название с эмодзи, кто: 'vitya'|'kolya'|'both'] */
         const SCHEDULE = {
             pn: [
-                ['1', '14:40–',       '🏃 Спортивный час',          'kolya'],
-                ['2', '15:30–17:00',  '🤖 IT-куб',                   'kolya'],
-                ['3', '19:00–20:30',  '👊 ММА',                      'both']
+                ['1', '17:30–18:50', '📚 Занятие с репетитором', 'kolya'],
+                ['2', '19:00–20:30', '👊 ММА', 'both']
             ],
             vt: [
-                ['1', '13:10–13:50',  '🏃 Физкультура',              'vitya'],
-                ['2', '14:00–14:40',  '🌊 Бассейн',                  'kolya'],
-                ['3', '14:50–16:00',  '🧠 Робототехника',            'both'],
-                ['4', '16:20–17:50',  '🤖 IT-куб',                   'vitya']
+                ['1', '16:30–17:30', '🏋️ Занятие в зале', 'vitya'],
+                ['2', '17:00–17:30', '🏋️ Занятие в зале', 'kolya']
             ],
             sr: [
-                ['1', '12:10–12:50',  '🏃 Физкультура',              'kolya'],
-                ['2', '19:00–20:30',  '👊 ММА',                      'both']
+                ['1', '17:30–18:50', '📚 Занятие с репетитором', 'kolya'],
+                ['2', '19:00–20:30', '👊 ММА', 'both']
             ],
             cht: [
-                ['1', '12:20–13:00',  '🏃 Физкультура',              'vitya'],
-                ['2', '14:50–15:30',  '🌵 Мы все такие разные',      'vitya'],
-                ['3', '16:20–17:50',  '🤖 IT-куб',                   'vitya']
+                ['1', '16:30–17:30', '🏋️ Занятие в зале', 'vitya'],
+                ['2', '17:00–17:30', '🏋️ Занятие в зале', 'kolya']
             ],
             pt: [
-                ['1', '11:20–12:00',  '🌊 Бассейн',                  'vitya'],
-                ['2', '12:10–12:50',  '🏃 Физкультура',              'kolya'],
-                ['3', '14:45–16:00',  '🤖 IT-куб',                   'vitya'],
-                ['4', '19:00–20:30',  '👊 ММА',                      'both']
+                ['1', '17:30–18:50', '📚 Занятие с репетитором', 'kolya'],
+                ['2', '19:00–20:30', '👊 ММА', 'both']
+            ],
+            sb: [
+                ['1', '10:00–10:40', '🎵 Музыка', 'kolya'],
+                ['2', '10:40–11:20', '🎵 Музыка', 'vitya']
             ]
         };
 
@@ -710,8 +709,8 @@
         }
 
         function todayKey() {
-            const d = new Date().getDay(); // 1 = Пн ... 5 = Пт
-            return (d >= 1 && d <= 5) ? DAYS[d - 1].key : null;
+            const d = new Date().getDay(); // 1 = Пн ... 6 = Сб
+            return (d >= 1 && d <= 6) ? DAYS[d - 1].key : null;
         }
 
         function moveIndicator() {
