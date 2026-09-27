@@ -232,7 +232,7 @@
             top: 4px;
             bottom: 4px;
             left: 4px;
-            width: 20%;
+            width: calc((100% - 20px) / 7);
             border-radius: 11px;
             background: var(--pill-active);
             box-shadow: 0 2px 10px rgba(30, 30, 80, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.65);
@@ -573,6 +573,7 @@
             <button class="seg" type="button" role="tab" data-day="cht">Чт</button>
             <button class="seg" type="button" role="tab" data-day="pt">Пт</button>
             <button class="seg" type="button" role="tab" data-day="sb">Сб</button>
+            <button class="seg" type="button" role="tab" data-day="vs">Вс</button>
         </div>
 
         <section class="day-card glass" aria-label="Занятия дня">
@@ -586,6 +587,7 @@
             <div id="cht" class="schedule"></div>
             <div id="pt" class="schedule"></div>
             <div id="sb" class="schedule"></div>
+            <div id="vs" class="schedule"></div>
         </section>
 
         <section class="legend-card glass" aria-label="Кто ходит">
@@ -622,7 +624,8 @@
             { key: 'sr', name: 'Среда' },
             { key: 'cht', name: 'Четверг' },
             { key: 'pt', name: 'Пятница' },
-            { key: 'sb', name: 'Суббота' }
+            { key: 'sb', name: 'Суббота' },
+            { key: 'vs', name: 'Воскресенье' }
         ];
 
         /* Расписание доп. занятий: [номер, время, название с эмодзи, кто: 'vitya'|'kolya'|'both'] */
@@ -650,6 +653,10 @@
             sb: [
                 ['1', '10:00–10:40', '🎵 Музыка', 'kolya'],
                 ['2', '10:40–11:20', '🎵 Музыка', 'vitya']
+            ],
+            vs: [
+                ['1', '12:00–12:45', '🎾 Тенис', 'kolya'],
+                ['2', '12:00–13:30', '🧹 Уборка дома', 'vitya']
             ]
         };
 
@@ -709,8 +716,8 @@
         }
 
         function todayKey() {
-            const d = new Date().getDay(); // 1 = Пн ... 6 = Сб
-            return (d >= 1 && d <= 6) ? DAYS[d - 1].key : null;
+            const d = new Date().getDay(); // 0 = Вс, 1 = Пн ... 6 = Сб
+            return d === 0 ? 'vs' : DAYS[d - 1].key;
         }
 
         function moveIndicator() {
